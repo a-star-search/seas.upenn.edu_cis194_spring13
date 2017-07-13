@@ -1,23 +1,24 @@
 
 --validating credit card numbers
-validate :: [Integer] -> Integer
-validate [] = 0
-validate arr =  sum (numberListToDigitList (
-  doubleElementsInEvenIndeces (
-    numberListToDigitList (reverse arr) )))
+validate :: Integer -> Bool
+validate x = ((checksum (toDigits x)) `mod` 10) == 0
 
-doubleElementsInEvenIndeces :: [Integer] -> [Integer]
-doubleElementsInEvenIndeces [] = []
-doubleElementsInEvenIndeces arr = zipWith (*) arr (cycle[1, 2])
+checksum :: [Integer] -> Integer
+checksum [] = 0
+checksum arr =  sum (numberListToDigitList (doubleEveryOther (reverse arr)))
+
+doubleEveryOther :: [Integer] -> [Integer]
+doubleEveryOther [] = []
+doubleEveryOther arr = zipWith (*) arr (cycle[1, 2])
 
 numberListToDigitList :: [Integer] -> [Integer]
 numberListToDigitList [] = []
-numberListToDigitList arr = concat( (map (numberToDigitList) arr))
+numberListToDigitList arr = concat( (map (toDigits) arr))
 
-numberToDigitList :: Integer -> [Integer]
-numberToDigitList 0 = [0]
-numberToDigitList x = numberToDigitListRecursive x
+toDigits :: Integer -> [Integer]
+toDigits 0 = [0]
+toDigits x = toDigitsRecursive x
 
-numberToDigitListRecursive :: Integer -> [Integer]
-numberToDigitListRecursive 0 = []
-numberToDigitListRecursive x = numberToDigitListRecursive (x `div` 10) ++ [x `mod` 10]
+toDigitsRecursive :: Integer -> [Integer]
+toDigitsRecursive 0 = []
+toDigitsRecursive x = toDigitsRecursive (x `div` 10) ++ [x `mod` 10]
